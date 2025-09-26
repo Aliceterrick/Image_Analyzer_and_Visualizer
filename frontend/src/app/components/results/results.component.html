@@ -1,0 +1,48 @@
+<div class="results-container">
+  <div class="available-results">
+    <h2>Available results</h2>
+    <ul class="results-list">
+      <li *ngFor="let key of keys">
+        <button (click)="loadResult(key)">{{ key }}</button>
+      </li>
+    </ul>
+  </div>
+
+  <div *ngIf="selected as sel">
+    <div class="original">
+      <h2>Original image</h2>
+      <img [src]="getOriginalUrl()" alt="original" />
+    </div>
+
+    <div class="annotated-section">
+      <div class="annotated-block">
+        <h3>Annotated (Local)</h3>
+        <img [src]="getAnnotatedUrl('local')" alt="local annotated" />
+        <ul>
+          <li *ngFor="let d of sel.local">
+            {{ d.label }} ({{ d.confidence | percent:'1.0-2' }})
+            <span *ngIf="d.bbox"> — BBox: [{{ d.bbox.join(', ') }}]</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="annotated-block">
+        <h3>Annotated (Cloud)</h3>
+        <img [src]="getAnnotatedUrl('cloud')" alt="cloud annotated" />
+        <h4>Instances</h4>
+        <ul>
+          <li *ngFor="let d of sel.cloud?.instances">
+            {{ d.label }} ({{ d.confidence | percent:'1.0-2' }})
+            <span *ngIf="d.bbox"> — BBox: [{{ d.bbox.join(', ') }}]</span>
+          </li>
+        </ul>
+        <h4>Concepts</h4>
+        <ul>
+          <li *ngFor="let c of sel.cloud?.concepts">
+            {{ c.label }} ({{ c.confidence | percent:'1.0-2' }})
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
